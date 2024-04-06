@@ -1,0 +1,8 @@
+# telegram
+python-telegram-bot==21.0.1
+
+Django~=3.2.23
+psycopg2==2.9.9
+ipython==8.5.0  # enhanced python interpreter
+dotenv
+celery==5.3.6
