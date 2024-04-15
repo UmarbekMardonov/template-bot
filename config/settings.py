@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dotenv
+
 # load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,6 @@ dotenv_file = BASE_DIR / ".env"
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -36,13 +36,10 @@ if os.environ.get('DJANGO_DEBUG', default=False) in ['True', 'true', '1', True]:
 else:
     DEBUG = False
 
-
 ALLOWED_HOSTS = ['*']
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 SEND_MESSAGE_CHAT_ID = os.getenv("SEND_MESSAGE_CHAT_ID", default=None)
-
-
 
 # Application definition
 
@@ -53,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_celery_results",
+    "django_celery_beat",
 
     # local app
     'users',
@@ -87,7 +86,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 # Database = https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -127,20 +125,40 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+TIME_ZONE = 'Asia/Tashkent'
+
+# REDIS CACHE
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# -----> CELERY
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

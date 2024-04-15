@@ -22,4 +22,4 @@ async def main_menu():
             KeyboardButton(text=CHOOSE_LANGUAGE, ),
         ]
     ]
-    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)

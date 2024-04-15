@@ -6,3 +6,6 @@ psycopg2==2.9.9
 ipython==8.5.0  # enhanced python interpreter
 dotenv
 celery==5.3.6
+django-celery-beat==2.6.0
+redis==5.0.3
+django-redis==5.4.0

@@ -7,6 +7,7 @@ from utils.context.admins import admin_start_send_message
 from tg_bot.handlers.users.keyboards import choose_language, main_menu
 from tg_bot import states
 from asgiref.sync import sync_to_async
+from telegram import ReplyKeyboardRemove
 
 
 async def command_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -35,6 +36,7 @@ async def language_choose(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await User.get_user_with_user_id(user_id)
     text = await users.choose_language_text(user)
     reply_markup = await choose_language()
+    await bot.send_message(chat_id=user_id, text="✔", reply_markup=ReplyKeyboardRemove())
     await bot.send_message(chat_id=user_id, text=text, reply_markup=reply_markup)
     return states.CHOOSE_LANG
 
